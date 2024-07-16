@@ -1403,13 +1403,19 @@ data "aws_iam_policy_document" "aws_load_balancer_controller" {
 }
 
 module "aws_load_balancer_controller" {
-  source  = "aws-ia/eks-blueprints-addon/aws"
-  version = "1.1.1"
-
+  #source  = "aws-ia/eks-blueprints-addon/aws"
+  #version = "1.1.1"
+  source = "github.com/BENMALEKarim/terraform-aws-eks-blueprints-addon//?ref=pod-identity"
   create = var.enable_aws_load_balancer_controller
 
   # Disable helm release
   create_release = var.create_kubernetes_resources
+
+  # Using pod-identity
+  cluster_name                    = var.cluster_name
+  enable_pod_identity             = true
+  create_pod_identity_association = true
+  service_account                 = local.aws_load_balancer_controller_service_account
 
   # https://github.com/aws/eks-charts/blob/master/stable/aws-load-balancer-controller/Chart.yaml
   name        = try(var.aws_load_balancer_controller.name, "aws-load-balancer-controller")
@@ -1478,13 +1484,13 @@ module "aws_load_balancer_controller" {
   policy_path             = try(var.aws_load_balancer_controller.policy_path, null)
   policy_description      = try(var.aws_load_balancer_controller.policy_description, "IAM Policy for AWS Load Balancer Controller")
 
-  oidc_providers = {
+  /*oidc_providers = {
     this = {
       provider_arn = local.oidc_provider_arn
       # namespace is inherited from chart
       service_account = local.aws_load_balancer_controller_service_account
     }
-  }
+  }*/
 
   tags = var.tags
 }
