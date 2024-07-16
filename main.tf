@@ -2390,13 +2390,18 @@ data "aws_iam_policy_document" "external_secrets" {
 }
 
 module "external_secrets" {
-  source  = "aws-ia/eks-blueprints-addon/aws"
-  version = "1.1.1"
+  #source  = "aws-ia/eks-blueprints-addon/aws"
+  #version = "1.1.1"
+  source = "github.com/BENMALEKarim/terraform-aws-eks-blueprints-addon//?ref=pod-identity"
 
   create = var.enable_external_secrets
 
   # Disable helm release
   create_release = var.create_kubernetes_resources
+
+  # Using pod-identity
+  enable_pod_identity             = true
+  create_pod_identity_association = true
 
   # https://github.com/external-secrets/external-secrets/blob/main/deploy/charts/external-secrets/Chart.yaml
   name             = try(var.external_secrets.name, "external-secrets")
@@ -2465,13 +2470,13 @@ module "external_secrets" {
   policy_path             = try(var.external_secrets.policy_path, null)
   policy_description      = try(var.external_secrets.policy_description, "IAM Policy for external-secrets operator")
 
-  oidc_providers = {
+  /*oidc_providers = {
     this = {
       provider_arn = local.oidc_provider_arn
       # namespace is inherited from chart
       service_account = local.external_secrets_service_account
     }
-  }
+  }*/
 
   tags = var.tags
 }
