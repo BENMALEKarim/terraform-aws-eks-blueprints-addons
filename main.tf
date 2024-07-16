@@ -2403,6 +2403,7 @@ module "external_secrets" {
   cluster_name                    = var.cluster_name
   enable_pod_identity             = true
   create_pod_identity_association = true
+  service_account                 = local.external_secrets_service_account
 
   # https://github.com/external-secrets/external-secrets/blob/main/deploy/charts/external-secrets/Chart.yaml
   name             = try(var.external_secrets.name, "external-secrets")
