@@ -2394,15 +2394,13 @@ module "external_secrets" {
   #version = "1.1.1"
   source = "github.com/BENMALEKarim/terraform-aws-eks-blueprints-addon//?ref=pod-identity"
 
-  # To be used with pod identity association
-  cluster_name = var.cluster_name
-
   create = var.enable_external_secrets
 
   # Disable helm release
   create_release = var.create_kubernetes_resources
 
   # Using pod-identity
+  cluster_name                    = var.cluster_name
   enable_pod_identity             = true
   create_pod_identity_association = true
 
